@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
+#include <array>
+#include <cmath>
 
 // Define a struct
 
@@ -10,9 +11,6 @@ struct Point_2D {
 
 };
 
-// INPUT ---> {????} ---> OUTPUT
-//      {initialize struct}
-
 Point_2D create_point() {
     Point_2D tmp;
     tmp.x = rand() % 10;
@@ -21,30 +19,44 @@ Point_2D create_point() {
     return tmp;
 }
 
-// Pass by refference ( don't forget &)
-void initialize_in_place(Point_2D & point) {
-    point.x = rand() % 10;
-    point.y = rand() % 10;
 
+// a = (x_a, y_a)
+// b = (x_b, y_b)
+
+// sqrt((x_right)- x_left)^2 + (y_right - y_left)^2)
+
+float distance(Point_2D left, Point_2D right) {
+    float res_x = pow((right.x - left.x), 2);
+    float res_y = pow((right.y - left.y), 2);
+
+    return sqrt(res_x + res_y);
 }
-
 int main() { 
-    // Declare a variable with our struct and initialize its members
-    Point_2D my_point = create_point(); 
+    std::array<Point_2D, 10> points;
 
-    // Print its contents
-    std::cout << "Value of x: " << my_point.x << std::endl;
-    std::cout << "Value of y: " << my_point.y << std::endl;
+    for (int i = 0; i < 10; i++) {
+        points[i] = create_point();
+        std::cout << "point [" << i << "] = (" << points[i].x << ", "<< points[i].y << ")" << std::endl;
+    }
 
-    // Declare a variable with our struct and initialize its members
-    Point_2D empty_point;
-    initialize_in_place(empty_point);
-
-    // Print its contents
-    std::cout << "Value of x: " << empty_point.x << std::endl;
-    std::cout << "Value of y: " << empty_point.y << std::endl;
+    float largest_distance = 0.0;
+    Point_2D first, second;
 
 
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 10; j++) {
+            float d = distance(points[i], points[j]);
+            if ( d >= largest_distance) {
+                largest_distance = d;
+                first = points[i];
+                second = points[j];
+            }
+        }
+    }
+
+    std::cout << "The largest distance is: " << largest_distance << std::endl;
+    std::cout << "First point: (" << first.x << ", " << first.y << ")" << std::endl;
+    std::cout << "Second Point: (" << second.x << ", " <<  second.y << ")" << std::endl;
 
     return 0;
 }
